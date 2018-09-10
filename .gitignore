@@ -1,0 +1,8 @@
+/.phpintel
+/.vscode
+/node_modules
+/vendor
+/tmp/sessions/*
+.env
+npm-debug.log
+.phpunit.result.cache
