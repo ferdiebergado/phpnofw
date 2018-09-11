@@ -14,10 +14,19 @@ $environment = 'development';
 $whoops = new \Whoops\Run;
 if ($environment !== 'production') {
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-    // require App\DebugbarRenderer;
 } else {
     $whoops->pushHandler(function($e){
         echo 'Todo: Friendly error page and send an email to the developer';
     });
 }
 $whoops->register();
+
+require_once APP_PATH . 'helpers.php';
+
+$injector = include APP_PATH . 'Dependencies.php';
+
+$pdo = $injector->make('PDO');
+$request = $injector->make('Request');
+$response = $injector->make('Response');
+
+die(print_r($request));
