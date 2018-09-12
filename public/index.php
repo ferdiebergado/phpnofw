@@ -1,5 +1,6 @@
 <?php
 define('DEBUG_MODE', true);
+define('BASE_URL', 'http://localhost:8000');
 define('BASE_PATH', __DIR__ . '/../' . '/');
 define('APP_PATH', BASE_PATH . 'app' . '/');
 define('CONFIG_PATH', BASE_PATH . 'config' . '/');

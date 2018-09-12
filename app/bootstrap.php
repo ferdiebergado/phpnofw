@@ -3,16 +3,14 @@
 namespace App;
 
 require VENDOR_PATH . 'autoload.php';
-
-error_reporting(E_ALL);
-
-$environment = 'development';
+require_once 'helpers.php';
 
 /**
 * Register the error handler
 */
 $whoops = new \Whoops\Run;
-if ($environment !== 'production') {
+if (config('env') === 'dev') {
+    error_reporting(E_ALL);
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 } else {
     $whoops->pushHandler(function($e){
@@ -21,8 +19,8 @@ if ($environment !== 'production') {
 }
 $whoops->register();
 
-require_once 'helpers.php';
-
 $injector = include APP_PATH . 'Dependencies.php';
 
 require 'router.php';
+
+return $injector;

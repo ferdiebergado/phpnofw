@@ -29,6 +29,6 @@ use \DebugBar\StandardDebugBar;
 $standardDebugBar = new StandardDebugBar;
 $injector->share($standardDebugBar);
 
-$injector->make('App\\DebugbarRenderer');
+// $injector->make('App\\DebugbarRenderer');
 
 return $injector;
