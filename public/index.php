@@ -1,13 +1,14 @@
 <?php
+define('DEBUG_MODE', true);
 define('BASE_PATH', __DIR__ . '/../' . '/');
 define('APP_PATH', BASE_PATH . 'app' . '/');
 define('CONFIG_PATH', BASE_PATH . 'config' . '/');
+define('TMP_PATH', BASE_PATH . 'tmp' . '/');
+define('VENDOR_PATH', BASE_PATH . 'vendor' . '/');
+define('VIEW_PATH', APP_PATH . 'views' . '/');
+define('CONTROLLER_PATH', APP_PATH . 'Controllers' . '/');
 
-require __DIR__ . '/../app/bootstrap.php';
+$session_config = require(CONFIG_PATH . 'session.php');
+session_start($session_config);
 
-use Symfony\Component\HttpFoundation\Response;
-$content = '<h1>Hello</h1>';
-$status = 200;
-$headers = array('text/html');
-$response = new Response($content, $status, $headers);
-$response->send();
+require_once APP_PATH . 'bootstrap.php';

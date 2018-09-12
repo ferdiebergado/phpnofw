@@ -11,15 +11,10 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 
 	<?php if (config('env') === 'dev') {
-        echo DebugbarRenderer::getInstance()->renderHead();
+        echo $debugbarRenderer->renderHead();
     }?>
+
 	<title>PHP No Framework by ferdie</title>
 </head>
 <body>
-	<?php
-	if (empty($_SESSION['loggedIn'])) {
-		require VIEW_PATH . 'login.php';
-	} else {
-		require VIEW_PATH . 'home.php';
-	}
-	?>
+

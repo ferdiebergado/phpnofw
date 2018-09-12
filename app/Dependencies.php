@@ -2,7 +2,7 @@
 
 namespace App;
 
-$db = require_once(CONFIG_PATH . 'database.php');
+$db = require(CONFIG_PATH . 'database.php');
 $dsn = "mysql:host=". $db['host'] . ";port=" . $db['port'] . ";dbname=" . $db['dbname'] . ";charset=" . $db['charset'];
 
 $injector = new \Auryn\Injector;
@@ -16,29 +16,19 @@ $injector->define('PDO', [
 $injector->share('PDO');
 
 use \Symfony\Component\HttpFoundation\Request;
-use \Symfony\Component\HttpFoundation\Response;
-
 $request = new Request(
-   $_GET,
-    $_POST,
-    array(),
-    $_COOKIE,
-    $_FILES,
-    $_SERVER
+    $_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER
 );
-
-// $injector->alias('\\Symfony\\Component\\HttpFoundation\\Request', 'Request');
 $injector->share($request);
-// $injector->define('\\Symfony\\Component\\HttpFoundation\\Request', [
-//     ':query' => $_GET,
-//     ':request' => $_POST,
-//     ':attributes' => array(),
-//     ':cookies' => $_COOKIE,
-//     ':files' => $_FILES,
-//     ':server' => $_SERVER
-// ]);
 
-$injector->alias('Symfony\\Component\\HttpFoundation\\Response', 'Response');
-$injector->share('Response');
+use \Symfony\Component\HttpFoundation\Response;
+$response = new Response;
+$injector->share($response);
+
+use \DebugBar\StandardDebugBar;
+$standardDebugBar = new StandardDebugBar;
+$injector->share($standardDebugBar);
+
+$injector->make('App\\DebugbarRenderer');
 
 return $injector;

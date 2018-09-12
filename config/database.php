@@ -2,7 +2,7 @@
 return [
   'host' => 'localhost',
   'port' => '3306',
-  'dbname' => 'php',
+  'dbname' => 'php_ferdie',
   'charset' => 'utf8mb4',
   'username' => 'ferdie',
   'password' => 'stephferdie0218',

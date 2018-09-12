@@ -2,7 +2,7 @@
 
 namespace App;
 
-require __DIR__ . '/../vendor/autoload.php';
+require VENDOR_PATH . 'autoload.php';
 
 error_reporting(E_ALL);
 
@@ -21,12 +21,8 @@ if ($environment !== 'production') {
 }
 $whoops->register();
 
-require_once APP_PATH . 'helpers.php';
+require_once 'helpers.php';
 
 $injector = include APP_PATH . 'Dependencies.php';
 
-$pdo = $injector->make('PDO');
-$request = $injector->make('Request');
-$response = $injector->make('Response');
-
-die(print_r($request));
+require 'router.php';

@@ -1,15 +1,15 @@
 <?php
 namespace App;
 
-use DebugBar\StandardDebugBar;
+use \DebugBar\StandardDebugBar;
 
 class DebugbarRenderer {
     private $debugbar;
     public function __construct(StandardDebugBar $debugbar) {
         $this->debugbar = $debugbar;
+        $this->getRenderer();
     }
-    public static function getInstance() {
-        // $debugbar = new StandardDebugBar();
+    private function getRenderer() {
         $debugbarRenderer = $this->debugbar->getJavascriptRenderer();
         $debugbarRenderer->setBaseUrl('/debugbar');
         return $debugbarRenderer;
