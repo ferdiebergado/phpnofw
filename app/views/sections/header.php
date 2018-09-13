@@ -14,8 +14,11 @@
         echo $debugbarRenderer->renderHead();
     }?>
 
-	<title>PHP No Framework by ferdie</title>
+    <title>PHP No Framework by ferdie</title>
 </head>
 <body>
-<?php require (VIEW_PATH . 'sections/navbar.php');
+    <?php require VIEW_PATH . 'sections/navbar.php'; ?>
+    <div class="container-fluid mt-5">
+    <?php require VIEW_PATH . 'sections/nav.php'; ?>
+
 
