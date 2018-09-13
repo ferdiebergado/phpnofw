@@ -2,5 +2,6 @@
 
 return [
     ['GET', '/', ['App\Controllers\HomeController', 'index']],
-    ['GET', '/user/{id:[0-9]+}', ['App\Controllers\HomeController', 'user']],
+    ['GET', '/users', ['App\Controllers\HomeController', 'users']],
+    ['GET', '/login', ['App\Controllers\HomeController', 'login']],
 ];

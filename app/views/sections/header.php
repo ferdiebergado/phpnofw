@@ -17,4 +17,5 @@
 	<title>PHP No Framework by ferdie</title>
 </head>
 <body>
+<?php require (VIEW_PATH . 'sections/navbar.php');
 

@@ -12,7 +12,6 @@ $dispatcher = \FastRoute\cachedDispatcher($routeDefinitionCallback, [
     'cacheDisabled' => DEBUG_MODE,     /* optional, enabled by default */
 ]);
 
-
 // Fetch method and URI from somewhere
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
@@ -21,9 +20,11 @@ $uri = $_SERVER['REQUEST_URI'];
 if (false !== $pos = strpos($uri, '?')) {
     $uri = substr($uri, 0, $pos);
 }
+
 $uri = rawurldecode($uri);
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         echo '404 Not Found';
@@ -38,7 +39,8 @@ switch ($routeInfo[0]) {
         $className = $routeInfo[1][0];
         $method = $routeInfo[1][1];
         $vars = $routeInfo[2];
-        $class = $injector->make($className);
+        $class = $container->create($className);
+        // $class = new $className;
         $class->$method($vars);
         break;
 }

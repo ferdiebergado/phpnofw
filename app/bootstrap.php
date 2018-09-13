@@ -8,9 +8,9 @@ require_once 'helpers.php';
 /**
 * Register the error handler
 */
-$whoops = new \Whoops\Run;
 if (config('env') === 'dev') {
     error_reporting(E_ALL);
+    $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 } else {
     $whoops->pushHandler(function($e){
@@ -19,8 +19,8 @@ if (config('env') === 'dev') {
 }
 $whoops->register();
 
-$injector = include APP_PATH . 'Dependencies.php';
+$container = require 'container.php';
 
 require 'router.php';
 
-return $injector;
+return $container;

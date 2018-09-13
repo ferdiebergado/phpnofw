@@ -2,21 +2,24 @@
 
 namespace App\Controllers;
 
-use \Symfony\Component\HttpFoundation\Request;
+use \App\Models\User;
 
 class HomeController
 {
-    private $request;
-
-    public function __construct(Request $request) {
-        $this->request = $request;
-    }
-
     public function index() {
         return view('home');
     }
 
-    public function user($param) {
-        echo 'User' . $param['id'];
+    public function login($param) {
+       return view('sections/login');
+    }
+
+    public function users() {
+        $container = require(APP_PATH . 'container.php');
+        $model = $container->create(User::class);
+        $users = $model->all();
+        foreach ($users as $user) {
+            echo $user->name;
+        }
     }
 }

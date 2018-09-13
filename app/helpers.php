@@ -12,9 +12,7 @@ function view($view) {
         $debugbarRenderer = $debugbar->getJavascriptRenderer();
         $debugbarRenderer->setBaseUrl('/debugbar');
     }
-    $content = require(VIEW_PATH . 'sections/header.php');
-    $content .= require(VIEW_PATH . $view . '.php');
-    $content .= require(VIEW_PATH . 'sections/footer.php');
-    $response = new \Symfony\Component\HttpFoundation\Response($content);
-    $response->send();
+    require VIEW_PATH . 'sections/header.php';
+    require VIEW_PATH . $view . '.php';
+    require VIEW_PATH . 'sections/footer.php';
 }

@@ -12,4 +12,4 @@ define('CONTROLLER_PATH', APP_PATH . 'Controllers' . '/');
 $session_config = require(CONFIG_PATH . 'session.php');
 session_start($session_config);
 
-require_once APP_PATH . 'bootstrap.php';
+$container = require(APP_PATH . 'bootstrap.php');
