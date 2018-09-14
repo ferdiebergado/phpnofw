@@ -2,24 +2,41 @@
 
 namespace App\Controllers;
 
-use \App\Models\User;
+use App\Models\User;
 
 class HomeController
 {
+    private $user, $content;
+
+    public function __construct(User $user) {
+        $this->user = $user;
+        $this->content = '';
+    }
+
     public function index() {
-        return view('home');
+        if (isset($_SESSION['isLoggedIn'])) {
+            return view('home');
+        } else {
+            return view('login');
+        }
     }
 
     public function login($param) {
-       return view('sections/login');
-    }
+     return view('sections/login');
+ }
 
-    public function users() {
-        $container = require(APP_PATH . 'container.php');
-        $model = $container->create(User::class);
-        $users = $model->all();
-        foreach ($users as $user) {
-            echo $user->name;
-        }
-    }
+ public function users() {
+    $this->content = $this->user->all();
+    return view('home', $this->content);
+}
+
+public function user($param) {
+    $this->content = $this->user->find($param['id']);
+    return view('home', $this->content);
+}
+
+public function latestusers() {
+    $users = $this->user->latest();
+    return view('home', $this->content);
+}
 }

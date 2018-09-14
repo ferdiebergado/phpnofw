@@ -1,31 +1,37 @@
-<?php require CONTROLLER_PATH . 'LoginController.php'; ?>
-<div class="global-container">
-  <div class="card login-form">
-    <div class="card-body">
-      <h3 class="card-title text-center">Log in to the System</h3>
-      <div class="card-text">
-      <?php if (!empty($emailErr) || !empty($passwordErr)): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">Incorrect username or password.</div>
-      <?php endif; ?>
-      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <div class="form-group <?= isset($emailErr) ? 'has-danger' : ''; ?>">
-          <label for="exampleInputEmail1">Email address</label>
-          <input type="email" class="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="Email" value="<?= $email ?>" required autofocus>
-          <?php if (isset($emailErr)): ?>
-            <div class="invalid-feedback">
-              <?= $emailErr ?>
+<div class="clr30"></div>
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col-md-5">
+      <div class="card login" id="login1">
+        <div class="card-header"><strong>User Login</strong></div>
+        <div class="card-body">
+          <form method="POST" action="/login">
+            <div class="input-group mt-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope"></i></span>
             </div>
-          <?php endif; ?>
+            <input type="email" name="email" class="form-control <?php if(isset($_SESSION['errors']['email'])) { echo 'is-invalid'; } ?>" placeholder="Email" aria-label="Email" value="<?= $_SESSION['email'] ?? ''; ?>" aria-describedby="emailHelp" required autofocus>
         </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <!-- <a href="#" style="float:right;font-size:12px;">Forgot password?</a> -->
-          <input type="password" class="form-control form-control-sm" id="exampleInputPassword1" name="password" placeholder="Password" required>
+        <?php if (isset($_SESSION['errors']['email'])): ?>
+          <div><small id="emailHelp" class="text-danger"><?= $_SESSION['errors']['email'] ?></small></div>
+          <?php unset($_SESSION['errors']['email'], $_SESSION['email']); endif; ?>
+          <div class="input-group mt-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="password" name="password" class="form-control" placeholder="Password" aria-describedby="passwordHelp" required>
         </div>
-        <?php csrf_token(); ?>
-        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+        <a href="/reset" id="reset"><small>Forgot password?</small></a>
+        <?php if (isset($_SESSION['errors']['password'])): ?>
+          <div><p><small id="passwordHelp" class="text-danger"><?= $_SESSION['errors']['password'] ?></small></p></div>
+          <?php unset($_SESSION['errors']['password']); endif; ?>
+          <?= csrf_token(); ?>
+          <div class="pull-right"><button type="submit" class="btn btn-primary mt-3"><strong>Submit</strong></button></div>
       </form>
-    </div>
   </div>
+  <div class="card-footer text-center">
+    <small>&copy; Copyright 2018.</small>
+</div>
+</div>
 </div>
 </div>

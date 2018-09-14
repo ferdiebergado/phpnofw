@@ -1,31 +1,35 @@
 <?php declare(strict_types = 1);
 
-namespace App;
-
-use \Dice\Dice;
-
-$dice = new Dice;
+$container = new Dice\Dice;
 
 $db = require(CONFIG_PATH . 'database.php');
 $dsn = "mysql:host=". $db['host'] . ";port=" . $db['port'] . ";dbname=" . $db['dbname'] . ";charset=" . $db['charset'];
 
 $pdorule = [
          //Mark the class as shared so the same instance is returned each time
-         'shared' => true,
+   'shared' => true,
 
          //The constructor arguments that will be supplied when the instance is created
-         'constructParams' => [$dsn, $db['username'], $db['password'], $db['options']]
-        ];
+   'constructParams' => [$dsn, $db['username'], $db['password'], $db['options']]
+];
 
 //Apply the rule to the PDO class
-$dice->addRule('PDO', $pdorule);
-
+$container->addRule('PDO', $pdorule);
 
 //Now any time PDO is requested from Dice, the same instance will be returned
 //And will havebeen constructed with the arugments supplied in 'constructParams'
-$dice->create('PDO');
+try {
+    $container->create('PDO');
+} catch(PDOException $e) {
+    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+}
 
-// use \App\Models\BaseModel;
-// $dice->create(BaseModel::class);
+if (config('debug_mode')) {
+    $container->create('DebugBar\\DataCollector\\PDO\\TraceablePDO');
+    $container->create('DebugBar\\DataCollector\\PDO\\PDOCollector');
+}
 
-return $dice;
+$container->create('Core\\BaseModel');
+$container->create('App\\Models\\User');
+
+return $container;
