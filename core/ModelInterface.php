@@ -10,6 +10,6 @@ interface ModelInterface {
     public function latest($date);
     public function orderBy($field, $dir = 'ASC');
     public function create(array $attrs);
-    public function update(array $fields);
+    public function update($id, array $fields);
     public function delete($id);
 }

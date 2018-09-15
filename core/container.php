@@ -25,8 +25,10 @@ try {
 }
 
 if (config('debug_mode')) {
+    $container->create('DebugBar\\StandardDebugBar');
     $container->create('DebugBar\\DataCollector\\PDO\\TraceablePDO');
     $container->create('DebugBar\\DataCollector\\PDO\\PDOCollector');
+    $container->create('Core\\DebugbarRenderer');
 }
 
 $container->create('Core\\BaseModel');

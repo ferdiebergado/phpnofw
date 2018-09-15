@@ -9,15 +9,6 @@ class LoginController {
 
     public function __construct(User $user) {
         $this->user = $user;
-        $this->initVars();
-    }
-
-    public function initVars() {
-        unset(
-            $_SESSION['email'],
-            $_SESSION['errors']['email'],
-            $_SESSION['errors']['password']
-        );
     }
 
     public function showLoginForm()

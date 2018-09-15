@@ -20,6 +20,12 @@ class User extends BaseModel
         return $stmt->fetch();
     }
 
+    public function update(array $fields)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET ");
+
+    }
+
     public function latest($date = 'created_at') {
         $stmt = $this->db->prepare("SELECT * FROM users ORDER BY ? DESC");
         $stmt->execute(array($date));
@@ -34,9 +40,11 @@ class User extends BaseModel
         // $query = null;
         if(isset($user['id']) && password_verify($password, $user['password'])) {
             session_regenerate_id();
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['USER_ID'] = $user['id'];
+            $_SESSION['USER_NAME'] = $user['name'];
+            $_SESSION['USER_EMAIL'] = $user['email'];
+            $_SESSION['USER_CREATED_AT'] = $user['created_at'];
+            $_SESSION['LAST_LOGIN'] = $user['last_login'];
             $_SESSION['isLoggedIn'] = true;
             return true;
         }
@@ -44,4 +52,5 @@ class User extends BaseModel
             return false;
         }
     }
+
 }

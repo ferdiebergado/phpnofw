@@ -4,8 +4,10 @@
 
 body {
   background-color:#f2f2f2;
-
+  font-family: 'Source Sans Pro';
+  font-size: 200;
 }
+
 .login,.signup{
   margin-top:100px;
 

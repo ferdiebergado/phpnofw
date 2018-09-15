@@ -15,7 +15,8 @@
         "psr-4": {
             "App\\": "app/",
             "Core\\": "core/"
-        }
+        },
+        "files": ["core/helpers.php"]
     },
     "license": "MIT",
     "authors": [
@@ -23,6 +24,5 @@
             "name": "Ferdinand Saporas Bergado",
             "email": "ferdiebergado@gmail.com"
         }
-    ],
-    "minimum-stability": "stable"
+    ]
 }

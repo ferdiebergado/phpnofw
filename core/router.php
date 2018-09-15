@@ -24,18 +24,17 @@ if (false !== $pos = strpos($uri, '?')) {
 $uri = rawurldecode($uri);
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+$title = 'Page not found';
 
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        $msg = '404 Not Found';
-        return view('404', $msg);
+        return view('404', compact('title'));
         // ... 404 Not Found
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
-        $msg = '405 Method Not Allowed';
         // ... 405 Method Not Allowed
-        return view('405', $msg);
+        return view('404', compact('title'));
         break;
     case FastRoute\Dispatcher::FOUND:
         $className = $routeInfo[1][0];

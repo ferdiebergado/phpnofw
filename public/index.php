@@ -9,11 +9,7 @@ define('VIEW_PATH', APP_PATH . 'views/');
 define('VENDOR_PATH', BASE_PATH . 'vendor/');
 define('TMP_PATH', BASE_PATH . 'tmp/');
 
-$session_config = require_once(CONFIG_PATH . 'session.php');
-session_start($session_config);
-
 require VENDOR_PATH . 'autoload.php';
-require_once CORE_PATH . 'helpers.php';
 
 if (config('debug_mode')) {
     error_reporting(E_ALL);
@@ -22,6 +18,13 @@ if (config('debug_mode')) {
     $whoops->register();
 }
 
+if (session_status() === PHP_SESSION_NONE) {
+    $session_config = require(CONFIG_PATH . 'session.php');
+    session_start($session_config);
+}
+
 $container = require(CORE_PATH . 'container.php');
+
+sanitizeglobals();
 
 require CORE_PATH . 'router.php';
