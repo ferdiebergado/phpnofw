@@ -7,18 +7,10 @@ function config($key) {
     }
 }
 
-function view($view, $data = [], $viewonly = false) {
-    $headers = require_once(CONFIG_PATH . 'headers.php');
-    foreach ($headers as $key => $value) {
-        header("$key: $value", false);
-    }
-    if (!$viewonly) {
-        require VIEW_PATH . 'sections/header.php';
-    }
+function view($view, $data = []) {
+    require VIEW_PATH . 'sections/header.php';
     require VIEW_PATH . $view . '.php';
-    if (!$viewonly) {
-        require VIEW_PATH . 'sections/footer.php';
-    }
+    require VIEW_PATH . 'sections/footer.php';
 }
 
 function csrf_token() {
@@ -82,6 +74,7 @@ function sanitizeglobals() {
     }
 
     foreach ($_POST as $key => $value) {
+        $_POST[$key] = test_input($_POST[$key]);
         $_POST[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
     }
 
@@ -98,4 +91,15 @@ function sanitizeglobals() {
     }
 
     $_REQUEST = array_merge($_GET, $_POST);
+}
+
+function set_secure_headers(){
+    $headers = require_once CONFIG_PATH . 'headers.php';
+    foreach ($headers as $key => $value) {
+        header("$key: $value", false);
+    }
+}
+
+function back() {
+    header('Location: ' . $_SESSION['REDIRECT_ROUTE']);
 }

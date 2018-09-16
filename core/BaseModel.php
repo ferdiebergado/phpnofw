@@ -7,7 +7,7 @@ use DebugBar\DataCollector\PDO\TraceablePDO;
 
 class BaseModel
 {
-    protected $pdo;
+    protected $db;
 
     public function __construct(TraceablePDO $db) {
         $this->db = $db;

@@ -4,5 +4,6 @@ return [
     ['GET', '/login', ['App\Controllers\LoginController', 'showLoginForm']],
     ['POST', '/login', ['App\Controllers\LoginController', 'login']],
     ['POST', '/logout', ['App\Controllers\LoginController', 'logout']],
-    ['GET', '/user/{id:\d+}/edit', ['App\Controllers\UserController', 'edit']]
+    ['GET', '/user/{id:\d+}/edit', ['App\Controllers\UserController', 'edit']],
+    ['POST', '/user/{id:\d+}', ['App\Controllers\UserController', 'update']]
 ];

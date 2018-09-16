@@ -48,6 +48,10 @@
     })
   })
 </script>
+<script type="text/javascript">
+  // Automatically dismiss alerts after several seconds
+  $("#divAlert").delay(4000).fadeOut(600);
+</script>
 <?php if (config('debug_mode')) {
     echo Core\DebugbarRenderer::render();
 }?>

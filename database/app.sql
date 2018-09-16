@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(150) NOT NULL,
   `password` varchar(255) NOT NULL,
   `active` boolean default true,
+  `role` int(2) default 9,
   `last_login` timestamp,
   `created_at` timestamp default current_timestamp,
   `updated_at` timestamp default current_timestamp ON UPDATE current_timestamp,

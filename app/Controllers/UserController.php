@@ -1,29 +1,48 @@
 <?php
 namespace App\Controllers;
+
+use App\Controllers\BaseController;
 use App\Models\User;
 
-class UserController {
+class UserController extends BaseController {
+    private $user;
+
+    public function __construct(User $user) {
+        $this->middleware('auth', 'active');
+        $this->user = $user;
+    }
+
     public function edit() {
         $title = 'Edit User';
         return view('user/edit', compact('title'));
     }
-    public function update($param, User $user) {
+
+    public function update($param) {
         if (empty($_POST["name"])) {
             $_SESSION['errors']['name'] = 'Name is required';
         } else {
-            $_SESSION['name'] = test_input($_POST["name"]);
+            $name = $_POST["name"];
+            $_SESSION['name'] = $name;
         }
 
         if (empty($_POST["email"])) {
             $_SESSION['errors']['email'] = 'Email is required';
         } else {
-            $email = test_input($_POST["email"]);
+            $email = $_POST["email"];
             // check if e-mail address is well-formed
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['errors']['email'] = "Invalid email format";
             }
             $_SESSION['email'] = $email;
         }
-        $user->update($_POST, $param['id']);
+        if (empty($_SESSION['errors'])) {
+            if ($this->user->update($param['id'], compact('name', 'email'))) {
+                $_SESSION['message']['title'] = 'User updated.';
+                $_SESSION['message']['type'] = 'success';
+                return header('Location: /');
+            }
+        } else {
+            return back();
+        }
     }
 }

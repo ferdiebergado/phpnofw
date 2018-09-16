@@ -9,22 +9,23 @@ define('VIEW_PATH', APP_PATH . 'views/');
 define('VENDOR_PATH', BASE_PATH . 'vendor/');
 define('TMP_PATH', BASE_PATH . 'tmp/');
 
-require VENDOR_PATH . 'autoload.php';
+require_once VENDOR_PATH . 'autoload.php';
 
 if (config('debug_mode')) {
     error_reporting(E_ALL);
-    $whoops = new \Whoops\Run;
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    $whoops = new Whoops\Run;
+    $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler);
     $whoops->register();
 }
 
+$container = require_once(CORE_PATH . 'container.php');
+
 if (session_status() === PHP_SESSION_NONE) {
-    $session_config = require(CONFIG_PATH . 'session.php');
-    session_start($session_config);
+    $config = require_once(CONFIG_PATH . 'session.php');
+    Core\SessionManager::sessionStart($config['name'], $config['cookie_lifetime'], '/', null, null, $config['save_path']);
 }
 
-$container = require(CORE_PATH . 'container.php');
-
+set_secure_headers();
 sanitizeglobals();
 
-require CORE_PATH . 'router.php';
+require_once CORE_PATH . 'router.php';

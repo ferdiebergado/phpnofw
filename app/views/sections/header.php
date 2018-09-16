@@ -1,3 +1,4 @@
+<?php $_SESSION['REDIRECT_ROUTE'] = $_SERVER['REQUEST_URI']; ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -63,38 +64,38 @@
                             <img src="/img/avatars/default.png" class="img-circle" alt="User Image">
                             <p>
                                 <?= $_SESSION['USER_NAME'] ?>
-                              <small>Member since <?= date_format(date_create($_SESSION['USER_CREATED_AT']), 'F j, Y'); ?></small>
-                          </p>
-                      </li>
-                      <!-- Menu Body -->
-                      <li class="user-body">
-                        <div class="row">
-                          <div class="col-xs-4 text-center">
-                            <a href="#">Followers</a>
+                                <small>Member since <?= date_format(date_create($_SESSION['USER_CREATED_AT']), 'F j, Y'); ?></small>
+                            </p>
+                        </li>
+                        <!-- Menu Body -->
+                        <li class="user-body">
+                            <div class="row">
+                              <div class="col-xs-4 text-center">
+                                <a href="#">Followers</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Sales</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Friends</a>
+                            </div>
                         </div>
-                        <div class="col-xs-4 text-center">
-                            <a href="#">Sales</a>
-                        </div>
-                        <div class="col-xs-4 text-center">
-                            <a href="#">Friends</a>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                </li>
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                    <div class="pull-left">
-                      <a href="/user/<?= $_SESSION['USER_ID']; ?>/edit" class="btn btn-default btn-flat">Profile</a>
-                  </div>
-                  <div class="pull-right">
-                      <a href="javascript:void()" class="btn btn-default btn-flat" onclick="document.querySelector('#logout-form').submit();">Sign out</a>
-                      <form id="logout-form" method="POST" action="/logout" style="display: none;"><?= csrf_token(); ?></form>
-                  </div>
-              </li>
-          </ul>
-      </li>
-  </ul>
-</div>
+                        <!-- /.row -->
+                    </li>
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                        <div class="pull-left">
+                          <a href="/user/<?= $_SESSION['USER_ID']; ?>/edit" class="btn btn-default btn-flat">Profile</a>
+                      </div>
+                      <div class="pull-right">
+                          <a href="javascript:void()" class="btn btn-default btn-flat" onclick="document.querySelector('#logout-form').submit();">Sign out</a>
+                          <form id="logout-form" method="POST" action="/logout" style="display: none;"><?= csrf_token(); ?></form>
+                      </div>
+                  </li>
+              </ul>
+          </li>
+      </ul>
+  </div>
 </nav>
 </header>
 
@@ -143,33 +144,41 @@
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Pace page
-        <small>Loading example</small>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Examples</a></li>
-        <li class="active">Pace page</li>
-    </ol>
-</section>
+        <?php if (isset($_SESSION['message']['title'])): ?>
+            <div id="divAlert" class="alert alert-<?= $_SESSION['message']['type']; ?>">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong><?= ucfirst($_SESSION['message']['type']); ?></strong> <?= $_SESSION['message']['title']; ?>
+            </div>
+            <?php unset($_SESSION['message']['title']); unset($_SESSION['message']['type']); endif;?>
+        </section>
+        <section class="content-header">
+            <!-- Content Header (Page header) -->
+            <h1>
+                Pace page
+                <small>Loading example</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Examples</a></li>
+                <li class="active">Pace page</li>
+            </ol>
+        </section>
 
-<!-- Main content -->
-<section class="content">
+        <!-- Main content -->
+        <section class="content">
 
-  <!-- Default box -->
-  <div class="box box-primary">
-    <div class="box-header with-border">
-      <h3 class="box-title"><?= $data['title']; ?></h3>
+          <!-- Default box -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title"><?= $data['title']; ?></h3>
 
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-        title="Collapse">
-        <i class="fa fa-minus"></i></button>
-        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-          <i class="fa fa-times"></i></button>
-      </div>
-  </div>
-  <div class="box-body">
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                title="Collapse">
+                <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                  <i class="fa fa-times"></i></button>
+              </div>
+          </div>
+          <div class="box-body">

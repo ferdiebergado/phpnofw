@@ -1,6 +1,6 @@
 <?php
 return [
-    'name' => 'fsb_app_sid',
+    'name' => 'fsb_app',
     'save_path' => TMP_PATH . 'sessions',
-    'cookie_httponly' => true
+    'cookie_lifetime' => 5400
 ];

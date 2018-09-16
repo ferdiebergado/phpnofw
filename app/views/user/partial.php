@@ -22,7 +22,7 @@
   </div>
   <?php if (isset($_SESSION['errors']['name'])): ?>
     <span class="help-block" role="alert">
-      <small class="text-danger"><?= $_SESSION['errors']['name'] ?></small>
+      <small class="text-danger"><strong><?= $_SESSION['errors']['name'] ?></strong></small>
     </span>
     <?php unset($_SESSION['errors']['name']); endif; ?>
   </div>
@@ -38,7 +38,7 @@
       </div>
       <?php if (isset($_SESSION['errors']['email'])): ?>
         <span class="help-block" role="alert">
-          <small class="text-danger"><?= $_SESSION['errors']['email'] ?></small>
+          <small class="text-danger"><strong><?= $_SESSION['errors']['email'] ?></strong></small>
         </span>
         <?php unset($_SESSION['errors']['email']); endif; ?>
       </div>

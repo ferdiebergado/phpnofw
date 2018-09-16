@@ -1,7 +1,7 @@
 <?php
 
 $routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
-    $routes = require( CONFIG_PATH . 'routes.php');
+    $routes = require_once( CONFIG_PATH . 'routes.php');
     foreach ($routes as $route) {
         $r->addRoute($route[0], $route[1], $route[2]);
     }
@@ -28,13 +28,13 @@ $title = 'Page not found';
 
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        return view('404', compact('title'));
+        require VIEW_PATH . '404.php';
         // ... 404 Not Found
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
         // ... 405 Method Not Allowed
-        return view('404', compact('title'));
+        require VIEW_PATH . '404.php';
         break;
     case FastRoute\Dispatcher::FOUND:
         $className = $routeInfo[1][0];

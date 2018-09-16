@@ -8,8 +8,7 @@ class HomeController {
             $title = 'Home';
             return view('home', compact('title'));
         } else {
-            $title = 'Login';
-            return view('login', compact('title'), true);
+            return header('Location: /login');
         }
     }
 }

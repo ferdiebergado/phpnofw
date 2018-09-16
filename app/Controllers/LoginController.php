@@ -13,14 +13,14 @@ class LoginController {
 
     public function showLoginForm()
     {
-        return view('login');
+        require VIEW_PATH . 'login.php';
     }
 
     public function login() {
         if (empty($_POST["email"])) {
             $_SESSION['errors']['email'] = 'Email is required';
         } else {
-            $email = test_input($_POST["email"]);
+            $email = $_POST["email"];
             // check if e-mail address is well-formed
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['errors']['email'] = "Invalid email format";
@@ -31,7 +31,7 @@ class LoginController {
         if (empty($_POST["password"])) {
             $_SESSION['errors']['password'] = "Password is required";
         } else {
-            $password = test_input($_POST["password"]);
+            $password = $_POST["password"];
         }
 
         if (empty($_SESSION['errors']['email']) && empty($_SESSION['errors']['password'])) {
@@ -44,11 +44,14 @@ class LoginController {
         }
         return header('Location: /');
     }
-    public function logout() {
+    public static function logout() {
         if (verify_token($_POST['csrf_token'])) {
-            session_unset();
+            $_SESSION = array();
             session_destroy();
-            return header('Location: /');
+            // header('Cache-Control: nocache, no-store, max-age=0, must-revalidate', false);
+            // header('Pragma: no-cache', false);
+            // header('Expires: Sun, 02 Jan 1990 00:00:00 GMT', false);
+            return header('Location: /', false);
         }
     }
 }
