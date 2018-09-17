@@ -21,7 +21,8 @@ $container->addRule('PDO', $pdorule);
 try {
     $container->create('PDO');
 } catch(PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    logger($e->getMessage(), 2);
+    throw new \PDOException($e->getMessage(), $e->getCode());
 }
 
 if (config('debug_mode')) {

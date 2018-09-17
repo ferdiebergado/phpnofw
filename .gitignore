@@ -6,3 +6,4 @@
 .env
 npm-debug.log
 .phpunit.result.cache
+/nbproject/private/

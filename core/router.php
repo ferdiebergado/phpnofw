@@ -8,7 +8,7 @@ $routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
 };
 
 $dispatcher = \FastRoute\cachedDispatcher($routeDefinitionCallback, [
-    'cacheFile' => TMP_PATH . '/route.cache', /* required */
+    'cacheFile' => '/tmp/route.cache', /* required */
     'cacheDisabled' => config('debug_mode'),     /* optional, enabled by default */
 ]);
 

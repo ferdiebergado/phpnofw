@@ -23,13 +23,14 @@ function csrf_token() {
 CSRF;
 }
 
-function verify_token($post_token) {
-    if (!empty($post_token) && isset($_SESSION['token'])) {
-        if (hash_equals($_SESSION['token'], $post_token)) {
-         // Proceed to process the form data
+function verify_token($csrf_token) {
+    if (!empty($csrf_token) && isset($_SESSION['token'])) {
+        if (hash_equals($_SESSION['token'], $csrf_token)) {
+            // Proceed to process the form data
             return true;
         } else {
-         // Log this as a warning and keep an eye on these attempts
+            // Log this as a warning and keep an eye on these attempts
+            logger('CSRF attempt from ' . $_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['HTTP_USER_AGENT'], 3);
             return false;
         }
     }
@@ -102,4 +103,142 @@ function set_secure_headers(){
 
 function back() {
     header('Location: ' . $_SESSION['REDIRECT_ROUTE']);
+}
+
+function cache_set($key, $expire = null, $val) {
+    $config = require(CONFIG_PATH . 'cache.php');
+    if (empty($expire)) {
+        $expire = $config['expire'];
+    }
+    $expire *= 60;
+    // $expire = var_export($expire, true);
+    $val = var_export($val, true);
+   // HHVM fails at __set_state, so just use object cast for now
+   // $val = str_replace('stdClass::__set_state', '(object)', $val);
+   // Write to temp file first to ensure atomicity
+    // if (!file_exists('/tmp/fsb_app1')) {
+    //     mkdir('/tmp/fsb_app1', 0660);
+    // }
+    $tmp = $config['path'] . $key . uniqid('', true) . '.tmp';
+    file_put_contents($tmp, '<?php $val = ' . $val . '; $exp = ' . $expire . ';', LOCK_EX);
+    rename($tmp, $config['path'] . $key);
+    return $val;
+}
+
+function cache_remember($key, $expire = null, $val) {
+    $config = require(CONFIG_PATH . 'cache.php');
+    if (empty($expire)) {
+        $expire = $config['expire'];
+    }
+    $expire *= 3600;
+    $file = $config['path'] . $key;
+    if (!file_exists($file)) {
+        $val = cache_set($key, $expire, $val);
+    } else {
+        @include $file;
+        // Check file create time vs. your expire.
+        if (filemtime($file) < (time() - $exp)) {
+            $val = cache_set($key, $exp, $val);
+        }
+    }
+    return $val;
+}
+
+function cache_forget($key) {
+    $config = require(CONFIG_PATH . 'cache.php');
+    $file = $config['path'] . $key;
+    if (file_exists($file)) {
+        unlink($file);
+    }
+}
+
+function logger($msg, $type) {
+    $mode = FILE_APPEND;
+    if (!file_exists(LOG_FILE)) {
+        $mode = LOCK_EX;
+    }
+    switch ($type) {
+        case 1:
+        $type = 'INFO';
+        break;
+        case 2:
+        $type = 'ERROR EXCEPTION';
+        break;
+        case 3:
+        $type = 'WARNING';
+        break;
+    }
+    $log = '[' . date('Y/m/d h:i:s A e') . "] $type: " . $msg . "\n";
+    file_put_contents(LOG_FILE, $log, $mode);
+}
+
+function app_error_handler($errno, $errstr, $errfile, $errline) {
+    if (!(error_reporting() & $errno)) {
+        // This error code is not included in error_reporting, so let it fall
+        // through to the standard PHP error handler
+        return false;
+    }
+
+    switch ($errno) {
+        case E_USER_ERROR:
+        $msg = 'USER ERROR [' . $errno . ']' . $errstr . "\n" .
+        "  Fatal error on line $errline in file $errfile" .
+        ", PHP " . PHP_VERSION . " (" . PHP_OS . ")\n" .
+        "Aborting...\n";
+        logger($msg, 2);
+        exit(1);
+        break;
+
+        case E_USER_WARNING:
+        $msg = "My WARNING</b> [$errno] $errstr\n";
+        break;
+
+        case E_USER_NOTICE:
+        $msg = "My NOTICE [$errno] $errstr\n";
+        break;
+
+        default:
+        $msg = "Unknown error type: [$errno] $errstr\n";
+        break;
+    }
+
+    logger($msg, 2);
+
+    /* Don't execute PHP internal error handler */
+    return true;
+}
+
+function app_mail($mail_to, $mail_subject, $mail_message) {
+    $config = require(CONFIG_PATH . 'mail.php');
+    ini_set('SMTP', $config['host']);
+    ini_set('smtp_port', $config['port']);
+    ini_set('sendmail_path', 'sendmail -bs');
+
+    $encoding = "utf-8";
+
+    // Preferences for Subject field
+    $subject_preferences = array(
+        "input-charset" => $encoding,
+        "output-charset" => $encoding,
+        "line-length" => 76,
+        "line-break-chars" => "\r\n"
+    );
+
+    // Mail header
+    $header = "Content-type: text/html; charset=".$encoding." \r\n";
+    $header .= "From: ".$config['from_name']." <".$config['from_email']."> \r\n";
+    $header .= "MIME-Version: 1.0 \r\n";
+    $header .= "Content-Transfer-Encoding: 8bit \r\n";
+    $header .= "Date: ".date("r (T)")." \r\n";
+    $header .= iconv_mime_encode("Subject", $mail_subject, $subject_preferences);
+
+    // Send mail
+    $sent = mail($mail_to, $mail_subject, $mail_message, $header);
+    if ($sent) {
+        $_SESSION['message']['title'] = 'Email sent!';
+        $_SESSION['message']['type'] = 'success';
+    } else {
+        $_SESSION['message']['title'] = 'Email failed!';
+        $_SESSION['message']['type'] = 'danger';
+    }
 }

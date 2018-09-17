@@ -9,17 +9,21 @@ use PDO;
 
 class User extends BaseModel implements ModelInterface
 {
+    protected $guarded = [
+        'password'
+    ];
+
     public function all() {
         $stmt = $this->db->prepare("SELECT * FROM users");
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $this->guard($stmt->fetchAll());
     }
 
     public function find($id) {
         $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch();
+        return $this->guard($stmt->fetch());
     }
 
     public function update($id, array $fields)
@@ -31,6 +35,9 @@ class User extends BaseModel implements ModelInterface
         $updated = $stmt->execute();
         if ($updated) {
             $this->updateSession($fields);
+            cache_forget('user_' . $id);
+            cache_remember('user_' . $id, 30, $this->find($id));
+            logger("User $id updated.", 1);
         }
         return $updated;
     }
@@ -38,7 +45,7 @@ class User extends BaseModel implements ModelInterface
     public function latest($date = 'created_at') {
         $stmt = $this->db->prepare("SELECT * FROM users ORDER BY ? DESC");
         $stmt->execute(array($date));
-        return $stmt->fetchAll();
+        return $this->guard($stmt->fetchAll());
     }
 
     public function login($email, $password) {
@@ -46,21 +53,28 @@ class User extends BaseModel implements ModelInterface
         $query->bindParam(":email", $email, PDO::PARAM_STR);
         $query->execute();
         $user = $query->fetch();
-        if(isset($user['id']) && password_verify($password, $user['password'])) {
+        $hash = $user['password'];
+        if(isset($user['id']) && password_verify($password, $hash)) {
+            // TODO:
+            // if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
+            //     $newhash = password_hash($password, PASSWORD_DEFAULT);
+            //     $this->update($user['id'], ['password' => $newhash]);
+            // }
+            $user = $this->guard($user);
             $this->updateSession($user);
             $_SESSION['isLoggedIn'] = true;
+            cache_remember('user_'.$user['id'], 30, $user);
             return true;
         }
         else {
             return false;
         }
     }
+
     private function updateSession(array $fields) {
         SessionManager::regenerateSession();
         foreach($fields as $key => $value) {
-            if (($key !== 'password')) {
-                $_SESSION['USER_' . strtoupper($key)] = $value;
-            }
+            $_SESSION['USER_' . strtoupper($key)] = $value;
         }
     }
 }

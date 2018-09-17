@@ -2,14 +2,15 @@
 namespace Core;
 
 class SessionManager {
-    protected static $session_name, $savepath;
+    protected static $session_name;
     protected static function start_session() {
         session_start([
             'name' => self::$session_name . '_session',
-            'save_path' => self::$savepath
+            // 'save_path' => self::$savepath
         ]);
     }
-    public static function sessionStart($name, $limit = 0, $path = '/', $domain = null, $secure = null, $savepath = '/')
+    public static function sessionStart($name, $limit = 0, $path = '/', $domain = null, $secure = null)
+    // , $savepath = '/')
     {
     // Set the cookie name
         session_name($name . '_session');
@@ -21,7 +22,7 @@ class SessionManager {
     // session_set_cookie_params ( int $lifetime [, string $path [, string $domain [, bool $secure = FALSE [, bool $httponly = FALSE ]]]] )
         session_set_cookie_params($limit, $path, $domain, $https, true);
         self::$session_name = $name;
-        self::$savepath = $savepath;
+        // self::$savepath = $savepath;
         self::start_session();
 
     // Make sure the session hasn't expired, and destroy it if it has
