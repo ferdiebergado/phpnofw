@@ -24,7 +24,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"></i></span>
                     </div>
-                    <input type="password" name="password" class="form-control" placeholder="Password" aria-describedby="passwordHelp" required>
+                    <input type="password" name="password" class="form-control" placeholder="Password" aria-describedby="passwordHelp" required autocomplete="off">
                 </div>
                 <a href="/reset" id="reset"><small>Forgot password?</small></a>
                 <?php if (isset($_SESSION['errors']['password'])): ?>
