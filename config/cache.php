@@ -1,5 +1,5 @@
 <?php
 return [
-    'path' => '',
+    'path' => TMP_PATH . 'cache',
     'expire' => 30
 ];

@@ -110,13 +110,13 @@ function cache_set($key, $expire = null, $val) {
     if (empty($expire)) {
         $expire = cache_config('expire');
     }
-    $expire *= 60;
+    $expire *= 3600;
     $val = var_export($val, true);
    // HHVM fails at __set_state, so just use object cast for now
    // $val = str_replace('stdClass::__set_state', '(object)', $val);
    // Write to temp file first to ensure atomicity
     $tmp = $path . $key . uniqid('', true) . '.tmp';
-    $o = file_put_contents($tmp, '<?php $val = ' . $val . '; $exp = ' . $expire . ';', LOCK_EX);
+    file_put_contents($tmp, '<?php $val = ' . $val . '; $exp = ' . $expire . ';', LOCK_EX);
     rename($tmp, $path . $key);
     return $val;
 }

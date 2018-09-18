@@ -8,7 +8,7 @@
 
 /* Declare constants */
 define('BASE_URL', 'http://localhost:8000');
-define('BASE_PATH', __DIR__ . '/../' . '/');
+define('BASE_PATH', __DIR__ . '/../');
 define('APP_PATH', BASE_PATH . 'app/');
 define('CORE_PATH', BASE_PATH . 'core/');
 define('CONFIG_PATH', BASE_PATH . 'config/');
