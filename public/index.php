@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPNoFW - A No Framework PHP Web Application Skeleton
+ * phpnofw - A No Framework PHP Web Application Skeleton
  *
- * @project  PHPNoFW
+ * @package  phpnofw
  * @author   Ferdinand Saporas Bergado <ferdiebergado@gmail.com>
  */
 
@@ -34,7 +34,8 @@ if (config('debug_mode')) {
         $whoops->writeToOutput(false);
         $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
         $body = $whoops->handleException($e);
-        Core\Mail::send('ferdiebergado@gmail.com', 'Error Exception', $body);
+        $app = require(CONFIG_PATH . 'app.php');
+        Core\Mail::send($app['author_email'], $app['name'] . ' Error Exception', $body);
         logger($e->getMessage(), 2);
         require VIEW_PATH . '500.php';
     });
@@ -53,7 +54,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 /* end session */
 
-/* Set secure headers */
+/* Set security headers */
 set_secure_headers();
 /* end headers */
 
@@ -65,4 +66,4 @@ sanitizeglobals();
 require_once CORE_PATH . 'router.php';
 /* end router */
 
-/* LET'S ROCK!!! */
+/*** LET'S ROCK!!! ***/

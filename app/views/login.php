@@ -26,7 +26,7 @@
                     </div>
                     <input type="password" name="password" class="form-control" placeholder="Password" aria-describedby="passwordHelp" required autocomplete="off">
                 </div>
-                <a href="/reset" id="reset"><small>Forgot password?</small></a>
+                <!-- <a href="/reset" id="reset"><small>Forgot password?</small></a> -->
                 <?php if (isset($_SESSION['errors']['password'])): ?>
                   <div><p><small id="passwordHelp" class="text-danger"><?= $_SESSION['errors']['password'] ?></small></p></div>
                   <?php unset($_SESSION['errors']['password']); endif; ?>

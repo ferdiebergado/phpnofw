@@ -74,7 +74,7 @@ class User extends BaseModel implements ModelInterface
     private function updateSession(array $fields) {
         SessionManager::regenerateSession();
         foreach($fields as $key => $value) {
-            $_SESSION['USER_' . strtoupper($key)] = $value;
+            $_SESSION['USER_' . strtoupper($key)] = htmlspecialchars($value);
         }
     }
 }

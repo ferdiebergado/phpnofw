@@ -1,5 +1,5 @@
 <?php
 return [
-    'path' => sys_get_temp_dir(),
+    'path' => '',
     'expire' => 30
 ];

@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS php_ferdie CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE php_ferdie;
+CREATE DATABASE IF NOT EXISTS phpnofw CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE phpnofw;
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
