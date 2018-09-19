@@ -122,18 +122,20 @@ function cache_set($key, $expire = null, $val) {
 }
 
 function cache_remember($key, $expire = null, $val) {
-    if (empty($expire)) {
-        $expire = cache_config('expire');
-    }
-    $expire *= 3600;
-    $file = cache_config('path') . $key;
-    if (!file_exists($file)) {
-        $val = cache_set($key, $expire, $val);
-    } else {
-        @include $file;
-        // Check file create time vs. your expire.
-        if (filemtime($file) < (time() - $exp)) {
-            $val = cache_set($key, $exp, $val);
+    if (cache_config('enabled')) {
+        if (empty($expire)) {
+            $expire = cache_config('expire');
+        }
+        $expire *= 3600;
+        $file = cache_config('path') . $key;
+        if (!file_exists($file)) {
+            $val = cache_set($key, $expire, $val);
+        } else {
+            @include $file;
+            // Check file create time vs. your expire.
+            if (filemtime($file) < (time() - $exp)) {
+                $val = cache_set($key, $exp, $val);
+            }
         }
     }
     return $val;
@@ -154,7 +156,7 @@ function cache_config($key) {
         $path = sys_get_temp_dir() . '/' . $app['name'];
     }
     if (!is_dir($path)) {
-        mkdir($path, 0600, true);
+        mkdir($path, 0775, true);
     }
     $config['path'] = $path . '/';
     return $config[$key];

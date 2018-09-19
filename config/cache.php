@@ -1,5 +1,6 @@
 <?php
 return [
+    'enabled' => true,
     'path' => '',
-    'expire' => 30
+    'expire' => 30 //minutes
 ];
