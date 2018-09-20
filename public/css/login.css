@@ -43,6 +43,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-.row {
+.flex-row {
     width: auto;
 }

@@ -2,7 +2,7 @@
 /.vscode
 /node_modules
 /vendor
-/tmp/*
+/tmp/*.log
 .env
 npm-debug.log
 .phpunit.result.cache

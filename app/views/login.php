@@ -5,8 +5,8 @@
     <body>
         <!-- <div class="clr30"></div> -->
         <div class="flex-container">
-          <!-- <div class="row"> -->
-            <div class="col-xs-10 col-sm-10 col-md-3 col-lg-3">
+          <div class="flex-row">
+            <!-- <div class="col-xs-10 col-sm-10 col-md-3 col-lg-3"> -->
               <div class="card login" id="login1">
                 <div class="card-header"><strong>User Login</strong></div>
                 <div class="card-body">
