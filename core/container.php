@@ -18,12 +18,8 @@ $container->addRule('PDO', $pdorule);
 
 //Now any time PDO is requested from Dice, the same instance will be returned
 //And will havebeen constructed with the arugments supplied in 'constructParams'
-try {
-    $container->create('PDO');
-} catch(PDOException $e) {
-    logger($e->getMessage(), 2);
-    throw new \PDOException($e->getMessage(), $e->getCode());
-}
+
+$container->create('PDO');
 
 if (config('debug_mode')) {
     $container->create('DebugBar\\StandardDebugBar');
@@ -34,5 +30,6 @@ if (config('debug_mode')) {
 
 $container->create('Core\\BaseModel');
 $container->create('App\\Models\\User');
+$container->create('ParagonIE\\EasyDB\\EasyDB');
 
 return $container;

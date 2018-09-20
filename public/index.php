@@ -16,6 +16,8 @@ define('CONTROLLER_PATH', APP_PATH . 'Controllers/');
 define('VIEW_PATH', APP_PATH . 'views/');
 define('VENDOR_PATH', BASE_PATH . 'vendor/');
 define('TMP_PATH', BASE_PATH . 'tmp/');
+define('DATE_FORMAT_SHORT', 'Y-m-d h:i:s');
+define('DATE_FORMAT_LONG', 'Y-m-d h:i:s A e');
 define('LOG_FILE', TMP_PATH . 'app_' . date('Y') . '.log');
 /* end constants */
 

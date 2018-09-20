@@ -112,6 +112,19 @@
           </div>
           <!-- /CREATED AT -->
 
+          <!-- LAST LOGIN -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Last login</label>
+            <div class="col-sm-8">
+              <div class="box box-solid box-default no-margin">
+                <div class="box-body">
+                  <?= $_SESSION['USER_LAST_LOGIN'] ?? '(New)'; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /LAST LOGIN -->
+
           <div class="box-footer">
             <div class="col-md-2"></div>
             <div class="col-md-8">

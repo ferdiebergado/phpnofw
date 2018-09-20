@@ -150,7 +150,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <strong><?= ucfirst($_SESSION['message']['type']); ?></strong> <?= $_SESSION['message']['title']; ?>
             </div>
-            <?php unset($_SESSION['message']['title']); unset($_SESSION['message']['type']); endif;?>
+            <?php unset($_SESSION['message']); endif;?>
         </section>
         <section class="content-header">
             <!-- Content Header (Page header) -->

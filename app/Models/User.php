@@ -14,35 +14,36 @@ class User extends BaseModel implements ModelInterface
     ];
 
     public function all() {
-        $stmt = $this->db->prepare("SELECT * FROM users");
+        $stmt = $this->db->query("SELECT * FROM users");
         $stmt->execute();
         return $this->guard($stmt->fetchAll());
     }
 
     public function find($id) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $this->guard($stmt->fetch());
+        return $this->guard($this->db->row('SELECT * FROM users WHERE id = ?', $id));
+        // $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+        // $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        // $stmt->execute();
+        // return $this->guard($stmt->fetch());
     }
 
     public function update($id, array $fields)
     {
-        $qstr = '';
-        foreach ($fields as $key => $value) {
-            $qstr = $qstr . $key . '= :' . $key . ',';
-        }
-        $qstr = rtrim($qstr, ',');
-        $stmt = $this->db->prepare("UPDATE users SET " . $qstr . " WHERE id = :id");
-        foreach ($fields as $key => $value) {
-            $stmt->bindParam(":$key", $value, PDO::PARAM_STR);
-        }
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $updated = $stmt->execute();
+        // $qstr = '';
+        // foreach ($fields as $key => $value) {
+        //     $qstr = $qstr . $key . '=:' . $key . ',';
+        // }
+        $updated = $this->db->update('users', $fields, ['id' => $id]);
+        // $stmt = $this->db->prepare("UPDATE users SET " . rtrim($qstr, ',') . " WHERE id = :id");
+        // foreach ($fields as $key => $value) {
+        //     $stmt->bindParam(":$key", $value, PDO::PARAM_STR);
+        // }
+        // $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        // $updated = $stmt->execute();
         if ($updated) {
-            cache_forget('user_' . $id);
+            // cache_forget('user_' . $id);
             cache_remember('user_' . $id, 30, $this->find($id));
-            $this->updateSession($fields);
+            $this->updateSession($this->guard($fields));
             logger("User $id updated.", 1);
         }
         return $updated;
@@ -65,9 +66,9 @@ class User extends BaseModel implements ModelInterface
                 $newhash = password_hash($password, PASSWORD_DEFAULT);
                 $this->update($user['id'], ['password' => $newhash]);
             }
-            $user = $this->guard($user);
+            $this->update($user['id'], ['last_login' => date(DATE_FORMAT_SHORT)]);
+            $user = $this->guard($this->find($user['id']));
             $this->updateSession($user);
-            $_SESSION['isLoggedIn'] = true;
             cache_remember('user_'.$user['id'], 30, $user);
             return true;
         }
@@ -81,5 +82,6 @@ class User extends BaseModel implements ModelInterface
         foreach($fields as $key => $value) {
             $_SESSION['USER_' . strtoupper($key)] = htmlspecialchars($value);
         }
+        $_SESSION['isLoggedIn'] = true;
     }
 }

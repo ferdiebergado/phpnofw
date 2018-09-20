@@ -110,7 +110,7 @@ function cache_set($key, $expire = null, $val) {
     if (empty($expire)) {
         $expire = cache_config('expire');
     }
-    $expire *= 3600;
+    $expire *= 60;
     $val = var_export($val, true);
    // HHVM fails at __set_state, so just use object cast for now
    // $val = str_replace('stdClass::__set_state', '(object)', $val);
@@ -126,7 +126,6 @@ function cache_remember($key, $expire = null, $val) {
         if (empty($expire)) {
             $expire = cache_config('expire');
         }
-        $expire *= 3600;
         $file = cache_config('path') . $key;
         if (!file_exists($file)) {
             $val = cache_set($key, $expire, $val);
@@ -178,6 +177,6 @@ function logger($msg, $type) {
         $type = 'WARNING';
         break;
     }
-    $log = '[' . date('Y/m/d h:i:s A e') . "] $type: " . $msg . "\n";
+    $log = '[' . date(DATE_FORMAT_LONG) . "] $type: " . $msg . "\n";
     file_put_contents(LOG_FILE, $log, $mode);
 }

@@ -2,8 +2,9 @@
 
 namespace Core;
 
-use DebugBar\DataCollector\PDO\TraceablePDO;
+// use DebugBar\DataCollector\PDO\TraceablePDO;
 // use PDO;
+use \ParagonIE\EasyDB\EasyDB;
 
 class BaseModel
 {
@@ -11,7 +12,7 @@ class BaseModel
     protected $fillable = [];
     protected $guarded = [];
 
-    public function __construct(TraceablePDO $db) {
+    public function __construct(EasyDB $db) {
         $this->db = $db;
     }
 
