@@ -45,12 +45,4 @@ class User extends BaseModel
             return false;
         }
     }
-
-    private function updateSession(array $fields) {
-        SessionManager::regenerateSession();
-        foreach($fields as $key => $value) {
-            $_SESSION['USER_' . strtoupper($key)] = htmlspecialchars($value);
-        }
-        $_SESSION['isLoggedIn'] = true;
-    }
 }

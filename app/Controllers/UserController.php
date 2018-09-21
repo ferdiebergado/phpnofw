@@ -3,13 +3,14 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\User;
+use App\Services\UserService;
 
 class UserController extends BaseController {
-    private $user;
+    private $service;
 
-    public function __construct(User $user) {
+    public function __construct(UserService $service) {
         $this->middleware('auth', 'active');
-        $this->user = $user;
+        $this->service = $service;
     }
 
     public function edit() {
@@ -36,14 +37,7 @@ class UserController extends BaseController {
             $_SESSION['email'] = $email;
         }
         if (empty($_SESSION['errors'])) {
-            $id = $param['id'];
-            if ($this->user->update($id, compact('name', 'email'))) {
-                $user = $this->user->find($id);
-                cache_remember('user_' . $id, 30, $user);
-                $this->updateSession($this->guard($user));
-                logger("User $id updated.", 1);
-                $_SESSION['message']['title'] = 'User updated.';
-                $_SESSION['message']['type'] = 'success';
+            if ($this->service->update($param['id'], compact('name', 'email'))) {
                 return header('Location: /');
             }
         } else {

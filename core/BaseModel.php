@@ -12,11 +12,11 @@ class BaseModel implements ModelInterface
     protected $table;
     protected $fillable;
     protected $guarded;
-    
+
     public function __construct(EasyDB $db) {
         $this->db = $db;
         if (empty($this->table)) {
-            $this->table = \get_class($this) . 's';
+            $this->table = strtolower(str_replace('App\\Models\\', '', (\get_class($this)))) . 's';
         }
     }
 

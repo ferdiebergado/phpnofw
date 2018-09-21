@@ -7,7 +7,6 @@
  */
 
 /* Declare constants */
-define('BASE_URL', 'http://localhost:8000');
 define('BASE_PATH', __DIR__ . '/../');
 define('APP_PATH', BASE_PATH . 'app/');
 define('CORE_PATH', BASE_PATH . 'core/');
@@ -28,13 +27,14 @@ require_once VENDOR_PATH . 'autoload.php';
 /* Register the error handler */
 error_reporting(E_ALL);
 $whoops = new Whoops\Run;
+use Whoops\Handler\PrettyPageHandler;
 if (config('debug_mode')) {
-    $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler);
+    $whoops->pushHandler(new PrettyPageHandler);
 } else {
-    $whoops->pushHandler(function($e) use($whoops) {
+    $whoops->pushHandler(function($e) use(&$whoops) {
         $whoops->allowQuit(false);
         $whoops->writeToOutput(false);
-        $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
+        $whoops->pushHandler(new PrettyPageHandler);
         $body = $whoops->handleException($e);
         $app = require(CONFIG_PATH . 'app.php');
         Core\Mail::send($app['author_email'], $app['name'] . ' Error Exception', $body);
@@ -45,7 +45,7 @@ if (config('debug_mode')) {
 $whoops->register();
 /* end error handler */
 
-/* Initialize dependency injection container */
+/* Initialize the dependency injection container */
 $container = require_once(CORE_PATH . 'container.php');
 /* end container */
 
@@ -68,4 +68,4 @@ sanitizeglobals();
 require_once CORE_PATH . 'router.php';
 /* end router */
 
-/*** LET'S ROCK!!! ***/
+/*** LIFT OFF!!! ***/

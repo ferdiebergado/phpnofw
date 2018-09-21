@@ -15,7 +15,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope"></i></span>
                     </div>
-                    <input type="email" name="email" class="form-control <?php if(isset($_SESSION['errors']['email'])) { echo 'is-invalid'; } ?>" placeholder="Email" aria-label="Email" value="<?= $_SESSION['email'] ?? ''; ?>" aria-describedby="emailHelp" required autofocus>
+                    <input type="email" name="email" class="form-control <?php if(isset($_SESSION['errors']['email'])) { echo 'is-invalid'; } ?>" placeholder="Email" aria-label="Email" value="<?= htmlspecialchars($_SESSION['email'] ?? ''); ?>" aria-describedby="emailHelp" required autofocus>
                 </div>
                 <?php if (isset($_SESSION['errors']['email'])): ?>
                   <div><small id="emailHelp" class="text-danger"><?= $_SESSION['errors']['email'] ?></small></div>
