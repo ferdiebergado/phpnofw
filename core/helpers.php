@@ -1,9 +1,11 @@
 <?php
 
-function config($key) {
-    $config = require(CONFIG_PATH . 'app.php');
-    if (array_key_exists($key, $config)) {
-        return $config[$key];
+if (!function_exists('config')) {
+    function config($key) {
+        $config = require(CONFIG_PATH . 'app.php');
+        if (array_key_exists($key, $config)) {
+            return $config[$key];
+        }
     }
 }
 

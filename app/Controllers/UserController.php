@@ -36,7 +36,12 @@ class UserController extends BaseController {
             $_SESSION['email'] = $email;
         }
         if (empty($_SESSION['errors'])) {
-            if ($this->user->update($param['id'], compact('name', 'email'))) {
+            $id = $param['id'];
+            if ($this->user->update($id, compact('name', 'email'))) {
+                $user = $this->user->find($id);
+                cache_remember('user_' . $id, 30, $user);
+                $this->updateSession($this->guard($user));
+                logger("User $id updated.", 1);
                 $_SESSION['message']['title'] = 'User updated.';
                 $_SESSION['message']['type'] = 'success';
                 return header('Location: /');
