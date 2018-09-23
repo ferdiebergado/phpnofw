@@ -5,6 +5,7 @@ namespace App\Models;
 use Core\BaseModel;
 use Core\SessionManager;
 use PDO;
+use App\Services\UserService;
 
 class User extends BaseModel
 {
@@ -37,7 +38,7 @@ class User extends BaseModel
             }
             $this->update($user['id'], ['last_login' => date(DATE_FORMAT_SHORT)]);
             $user = $this->guard($this->find($user['id']));
-            $this->updateSession($user);
+            UserService::updateSession($user);
             cache_remember('user_'.$user['id'], 30, $user);
             return true;
         }

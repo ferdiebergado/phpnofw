@@ -13,14 +13,14 @@ class UserService {
         if (self::$user->update($id, $fields)) {
             $user = self::$user->find($id);
             cache_remember('user_' . $id, 30, $user);
-            $this->updateSession(self::$user->guard($user));
+            self::updateSession(self::$user->guard($user));
             logger("User $id updated.", 1);
             $_SESSION['message']['title'] = 'User updated.';
             $_SESSION['message']['type'] = 'success';
             return true;
         }
     }
-    private function updateSession(array $fields) {
+    public static function updateSession(array $fields) {
         SessionManager::regenerateSession();
         foreach($fields as $key => $value) {
             $_SESSION['USER_' . strtoupper($key)] = htmlspecialchars($value);

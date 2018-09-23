@@ -145,12 +145,7 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <section class="content-header">
-        <?php if (isset($_SESSION['message']['title'])): ?>
-            <div id="divAlert" class="alert alert-<?= $_SESSION['message']['type']; ?>">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <strong><?= ucfirst($_SESSION['message']['type']); ?></strong> <?= $_SESSION['message']['title']; ?>
-            </div>
-            <?php unset($_SESSION['message']); endif;?>
+        <?php include VIEW_PATH . 'sections/message.php'; ?>
         </section>
         <section class="content-header">
             <!-- Content Header (Page header) -->

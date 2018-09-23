@@ -10,6 +10,7 @@
               <div class="card login" id="login1">
                 <div class="card-header"><strong>User Login</strong></div>
                 <div class="card-body">
+                    <?php include VIEW_PATH . 'sections/message.php'; ?>
                   <form method="POST" action="/login">
                     <div class="input-group mt-3">
                       <div class="input-group-prepend">

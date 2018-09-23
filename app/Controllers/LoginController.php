@@ -40,6 +40,9 @@ class LoginController {
                 if (!$success) {
                     $_SESSION['errors']['email'] = 'Invalid username or password.';
                 }
+            } else {
+                $_SESSION['message']['title'] = "Session expired. Please login again.";
+                $_SESSION['message']['type'] = "error";
             }
         }
         return header('Location: /');
