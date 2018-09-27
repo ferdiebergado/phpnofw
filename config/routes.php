@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 return [
     ['GET', '/', ['App\Controllers\HomeController', 'index']],
     ['GET', '/login', ['App\Controllers\LoginController', 'showLoginForm']],

@@ -2,12 +2,14 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Controllers\BaseController;
 
-class LoginController {
+class LoginController extends BaseController {
 
     private $user;
 
     public function __construct(User $user) {
+        $this->middleware = 'guest';
         $this->user = $user;
     }
 

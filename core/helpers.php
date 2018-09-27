@@ -45,6 +45,7 @@ if (!function_exists('verify_token')) {
                 logger('CSRF attempt from ' . $_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['HTTP_USER_AGENT'], 3);
                 return false;
             }
+            unset($_SESSION['token']);
         }
     }
 }
@@ -139,9 +140,9 @@ if (!function_exists('cache_set')) {
         }
         $expire *= 60;
         $val = var_export($val, true);
-   // HHVM fails at __set_state, so just use object cast for now
-   // $val = str_replace('stdClass::__set_state', '(object)', $val);
-   // Write to temp file first to ensure atomicity
+       // HHVM fails at __set_state, so just use object cast for now
+       // $val = str_replace('stdClass::__set_state', '(object)', $val);
+       // Write to temp file first to ensure atomicity
         $tmp = $path . $key . uniqid('', true) . '.tmp';
         file_put_contents($tmp, '<?php $val = ' . $val . '; $exp = ' . $expire . ';', LOCK_EX);
         rename($tmp, $path . $key);
@@ -221,6 +222,7 @@ if (!function_exists('logger')) {
     }
 }
 
+/* Human readable date differences */
 if (!function_exists('nicetime')) {
     function nicetime($date)
     {
@@ -263,6 +265,7 @@ if (!function_exists('nicetime')) {
     }
 }
 
+/* Get ordinal form of a number */
 if (!function_exists('ordinal')) {
     function ordinal($cdnl){
         $test_c = abs($cdnl) % 10;
@@ -273,6 +276,7 @@ if (!function_exists('ordinal')) {
     }
 }
 
+/* Read contents of a csv file */
 if (!function_exists('readcsv')) {
     function readcsv($csvFile){
         $file_handle = fopen($csvFile, 'r');
@@ -284,6 +288,7 @@ if (!function_exists('readcsv')) {
     }
 }
 
+/* Generate a csv file */
 if (!function_exists('generatecsv')) {
     function generatecsv($data, $delimiter = ',', $enclosure = '"') {
      $handle = fopen('php://temp', 'r+');
@@ -303,7 +308,7 @@ if (!function_exists('generatecsv')) {
 if (!function_exists('encode_email')) {
     function encode_email($email='info@domain.com', $linkText='Contact Us', $attrs ='class="emailencoder"' )
     {
-    // remplazar aroba y puntos
+        // remplazar aroba y puntos
         $email = str_replace('@', '&#64;', $email);
         $email = str_replace('.', '&#46;', $email);
         $email = str_split($email, 5);

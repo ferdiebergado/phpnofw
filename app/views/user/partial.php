@@ -17,7 +17,7 @@
   <div class="col-sm-8">
     <div class="input-group">
       <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-      <input type="text" class="form-control" placeholder="Name" name="name" value="<?= htmlspecialchars($_SESSION['name'] ?? $_SESSION['USER_NAME']); ?>" maxlength="150" required autofocus>
+      <input type="text" class="form-control" placeholder="Name" name="name" value="<?= $_SESSION['name'] ?? $_SESSION['USER_NAME']; ?>" maxlength="150" required autofocus>
     </div>
   </div>
   <?php if (isset($_SESSION['errors']['name'])): ?>
@@ -34,7 +34,7 @@
     <div class="col-sm-8">
       <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-        <input id="email" type="email" class="form-control" placeholder="Email" name="email" value="<?= htmlspecialchars($_SESSION['email'] ?? $_SESSION['USER_EMAIL']); ?>" maxlength="150" required>
+        <input id="email" type="email" class="form-control" placeholder="Email" name="email" value="<?= $_SESSION['email'] ?? $_SESSION['USER_EMAIL']; ?>" maxlength="150" required>
       </div>
       <?php if (isset($_SESSION['errors']['email'])): ?>
         <span class="help-block" role="alert">

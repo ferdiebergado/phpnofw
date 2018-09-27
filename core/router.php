@@ -1,4 +1,5 @@
 <?php
+/*** Application Router ***/
 
 $routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
     $routes = require_once( CONFIG_PATH . 'routes.php');
