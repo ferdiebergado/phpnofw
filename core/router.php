@@ -1,47 +1,28 @@
 <?php
 /*** Application Router ***/
 
-$routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
-    $routes = require_once( CONFIG_PATH . 'routes.php');
-    foreach ($routes as $route) {
-        $r->addRoute($route[0], $route[1], $route[2]);
-    }
-};
+use Lead\Router\Router;
 
-$dispatcher = \FastRoute\cachedDispatcher($routeDefinitionCallback, [
-    'cacheFile' => '/tmp/route.cache', /* required */
-    'cacheDisabled' => config('debug_mode'),     /* optional, enabled by default */
-]);
+$router = new Router();
 
-// Fetch method and URI from somewhere
-$httpMethod = $_SERVER['REQUEST_METHOD'];
-$uri = $_SERVER['REQUEST_URI'];
+// Bind to all methods
+$router->bind('foo/bar', function() {
+    return "Hello World!";
+});
 
-// Strip query string (?foo=bar) and decode URI
-if (false !== $pos = strpos($uri, '?')) {
-    $uri = substr($uri, 0, $pos);
-}
+// Bind to POST and PUT at dev.example.com only
+$router->bind('foo/bar/edit', ['methods' => ['POST',' PUT'], 'host' => 'dev.example.com'], function() {
+    return "Hello World!!";
+});
 
-$uri = rawurldecode($uri);
+// The Router class makes no assumption of the ingoing request, so you have to pass
+// uri, methods, host, and protocol into `->route()` or use a PSR-7 Compatible Request.
+// Do not rely on $_SERVER, you must check or sanitize it!
+$route = $router->route(
+    $_SERVER['REQUEST_URI'], // foo/bar
+    $_SERVER['REQUEST_METHOD'], // get, post, put...etc
+    $_SERVER['HTTP_HOST'], // www.example.com
+    $_SERVER['SERVER_PROTOCOL'] // http or https
+);
 
-$routeInfo = $dispatcher->dispatch($httpMethod, $uri);
-
-switch ($routeInfo[0]) {
-    case FastRoute\Dispatcher::NOT_FOUND:
-        // ... 404 Not Found
-        require VIEW_PATH . '404.php';
-        break;
-    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        $allowedMethods = $routeInfo[1];
-        // ... 405 Method Not Allowed
-        require VIEW_PATH . '404.php';
-        break;
-    case FastRoute\Dispatcher::FOUND:
-        $className = $routeInfo[1][0];
-        $method = $routeInfo[1][1];
-        $vars = $routeInfo[2];
-        $class = $container->create($className);
-        // $class = new $className;
-        $class->$method($vars);
-        break;
-}
+echo $route->dispatch(); // Can throw an exception if the route is not valid.
